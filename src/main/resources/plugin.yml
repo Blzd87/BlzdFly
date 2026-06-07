@@ -4,6 +4,8 @@ main: com.blzd.fly.BlzdFly
 api-version: '1.21'
 author: Blzd
 description: Custom flight management plugin with timed flight, permanent flight, claim flight, safe landing, and claim plugin integration.
+softdepend:
+  - GriefDefender
 
 commands:
   fly:
