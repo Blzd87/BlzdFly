@@ -1,0 +1,6 @@
+name: BlzdPluginTemplate
+version: 1.0
+main: com.blzd.template.BlzdPluginTemplate
+api-version: '1.21'
+author: Blzd
+description: Plugin template for future custom plugins
