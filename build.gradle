@@ -12,10 +12,17 @@ repositories {
         name = 'papermc'
         url = 'https://repo.papermc.io/repository/maven-public/'
     }
+
+    maven {
+        name = 'griefdefender'
+        url = 'https://repo.glaremasters.me/repository/bloodshot'
+    }
 }
 
 dependencies {
     compileOnly 'io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT'
+
+    compileOnly group: 'com.griefdefender', name: 'api', version: '2.1.0-SNAPSHOT'
 }
 
 java {
