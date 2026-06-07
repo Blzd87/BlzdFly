@@ -20,126 +20,127 @@ public class FlyCommand implements CommandExecutor {
                              Command command,
                              String label,
                              String[] args) {
-
-        if (args.length == 0) {
-
-            if (!(sender instanceof Player player)) {
-                sender.sendMessage("Players only.");
-                return true;
-            }
-
-            if (args.length == 1 && args[0].equalsIgnoreCase("claimtest")) {
-
-                ClaimManager claimManager = new ClaimManager();
-            
-                if (claimManager.isInClaim(player)) {
-                    player.sendMessage("§aYou are inside a claim.");
-                } else {
-                    player.sendMessage("§cYou are not inside a claim.");
-                }
-            
-                return true;
-            }
-
-            if (player.hasPermission("blzdfly.permanent")) {
-
-                if (player.getAllowFlight()) {
-            
-                    player.setFlying(false);
-                    player.setAllowFlight(false);
-            
-                    player.sendMessage("§cFlight disabled.");
-            
-                } else {
-            
-                    player.setAllowFlight(true);
-            
-                    player.sendMessage("§aFlight enabled.");
-                }
-            
-                return true;
-            }
-            
-            if (!player.hasPermission("blzdfly.timed")) {
-                player.sendMessage("§cYou do not have permission.");
-                return true;
-            }
-            
-            long remaining = plugin.getPlayerDataManager()
-                    .getFlightSeconds(player.getUniqueId());
-            
-            if (remaining <= 0) {
-                player.sendMessage("§cYou have no flight time remaining.");
-                return true;
-            }
-            
-            boolean enabled =
-                    plugin.isFlightEnabled(player.getUniqueId());
-            
-            if (enabled) {
-            
-                plugin.setFlightEnabled(player.getUniqueId(), false);
-            
-                player.setFlying(false);
-                player.setAllowFlight(false);
-            
-                player.sendMessage("§cFlight disabled.");
-            
-            } else {
-            
-                plugin.setFlightEnabled(player.getUniqueId(), true);
-            
-                player.setAllowFlight(true);
-            
-                player.sendMessage("§aFlight enabled.");
-            }
-            
-            return true;
-        }
-
+    
         if (args.length == 1
                 && args[0].equalsIgnoreCase("reload")) {
-
+    
             if (!sender.hasPermission("blzdfly.admin")) {
                 sender.sendMessage("§cNo permission.");
                 return true;
             }
-
+    
             plugin.reloadConfig();
             plugin.getPlayerDataManager().reload();
-
+    
             sender.sendMessage("§aBlzdFly reloaded.");
-
+    
             return true;
         }
-
+    
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage("Players only.");
+            return true;
+        }
+    
+        if (args.length == 1
+                && args[0].equalsIgnoreCase("claimtest")) {
+    
+            ClaimManager claimManager = new ClaimManager();
+    
+            if (claimManager.isInClaim(player)) {
+                player.sendMessage("§aYou are inside a claim.");
+            } else {
+                player.sendMessage("§cYou are not inside a claim.");
+            }
+    
+            return true;
+        }
+    
+        if (args.length == 0) {
+    
+            if (player.hasPermission("blzdfly.permanent")) {
+    
+                if (player.getAllowFlight()) {
+    
+                    player.setFlying(false);
+                    player.setAllowFlight(false);
+    
+                    player.sendMessage("§cFlight disabled.");
+    
+                } else {
+    
+                    player.setAllowFlight(true);
+    
+                    player.sendMessage("§aFlight enabled.");
+                }
+    
+                return true;
+            }
+    
+            if (!player.hasPermission("blzdfly.timed")) {
+                player.sendMessage("§cYou do not have permission.");
+                return true;
+            }
+    
+            long remaining = plugin.getPlayerDataManager()
+                    .getFlightSeconds(player.getUniqueId());
+    
+            if (remaining <= 0) {
+                player.sendMessage("§cYou have no flight time remaining.");
+                return true;
+            }
+    
+            boolean enabled =
+                    plugin.isFlightEnabled(player.getUniqueId());
+    
+            if (enabled) {
+    
+                plugin.setFlightEnabled(player.getUniqueId(), false);
+    
+                player.setFlying(false);
+                player.setAllowFlight(false);
+    
+                player.sendMessage("§cFlight disabled.");
+    
+            } else {
+    
+                plugin.setFlightEnabled(player.getUniqueId(), true);
+    
+                player.setAllowFlight(true);
+    
+                player.sendMessage("§aFlight enabled.");
+            }
+    
+            return true;
+        }
+    
         if (args.length == 3
                 && sender.hasPermission("blzdfly.admin")) {
-
+    
             Player target = Bukkit.getPlayer(args[1]);
-
+    
             if (target == null) {
                 sender.sendMessage("§cPlayer not found.");
                 return true;
             }
-
+    
             long seconds = TimeUtil.parseTime(args[2]);
-
+    
             if (seconds < 0) {
                 sender.sendMessage("§cInvalid time.");
                 return true;
             }
-
+    
             switch (args[0].toLowerCase()) {
-
+    
                 case "give" -> {
-
+    
                     plugin.getPlayerDataManager()
                             .addFlightSeconds(
                                     target.getUniqueId(),
                                     seconds
                             );
-
+    
                     sender.sendMessage(
                             "§aAdded "
                                     + TimeUtil.formatTime(seconds)
@@ -147,15 +148,15 @@ public class FlyCommand implements CommandExecutor {
                                     + target.getName()
                     );
                 }
-
+    
                 case "remove" -> {
-
+    
                     plugin.getPlayerDataManager()
                             .removeFlightSeconds(
                                     target.getUniqueId(),
                                     seconds
                             );
-
+    
                     sender.sendMessage(
                             "§aRemoved "
                                     + TimeUtil.formatTime(seconds)
@@ -163,15 +164,15 @@ public class FlyCommand implements CommandExecutor {
                                     + target.getName()
                     );
                 }
-
+    
                 case "set" -> {
-
+    
                     plugin.getPlayerDataManager()
                             .setFlightSeconds(
                                     target.getUniqueId(),
                                     seconds
                             );
-
+    
                     sender.sendMessage(
                             "§aSet "
                                     + target.getName()
@@ -179,30 +180,30 @@ public class FlyCommand implements CommandExecutor {
                                     + TimeUtil.formatTime(seconds)
                     );
                 }
-
+    
                 default -> {
                     return false;
                 }
             }
-
+    
             return true;
         }
-
+    
         if (args.length == 2
                 && args[0].equalsIgnoreCase("time")
                 && sender.hasPermission("blzdfly.admin")) {
-
+    
             Player target = Bukkit.getPlayer(args[1]);
-
+    
             if (target == null) {
                 sender.sendMessage("§cPlayer not found.");
                 return true;
             }
-
+    
             long remaining =
                     plugin.getPlayerDataManager()
                             .getFlightSeconds(target.getUniqueId());
-
+    
             sender.sendMessage(
                     "§a"
                             + target.getName()
@@ -210,10 +211,10 @@ public class FlyCommand implements CommandExecutor {
                             + TimeUtil.formatTime(remaining)
                             + " remaining."
             );
-
+    
             return true;
         }
-
+    
         return false;
     }
 }
