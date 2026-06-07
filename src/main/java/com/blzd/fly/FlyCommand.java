@@ -70,7 +70,6 @@ public class FlyCommand implements CommandExecutor {
         
             player.sendMessage("§aClaim Found");
             player.sendMessage("§7ID: §f" + claim.getUniqueId());
-            player.sendMessage("§7Type: §f" + claim.getType().name());
             player.sendMessage("§7Owner UUID: §f" + claim.getOwnerUniqueId());
         
             return true;
