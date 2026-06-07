@@ -38,14 +38,14 @@ public class FlightTask extends BukkitRunnable {
                 continue;
             }
 
-            player.sendActionBar(
-                    Component.text("✈ Flight Time: " + TimeUtil.formatTime(remaining))
-            );
-
             remaining--;
 
             plugin.getPlayerDataManager()
                     .setFlightSeconds(player.getUniqueId(), remaining);
+
+            player.sendActionBar(
+                    Component.text("✈ Flight Time: " + TimeUtil.formatTime(remaining))
+            );
 
             if (remaining <= 0) {
 
