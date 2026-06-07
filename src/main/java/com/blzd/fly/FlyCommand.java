@@ -55,6 +55,26 @@ public class FlyCommand implements CommandExecutor {
     
             return true;
         }
+
+        if (args.length == 1
+        && args[0].equalsIgnoreCase("claiminfo")) {
+
+            ClaimManager claimManager = new ClaimManager();
+        
+            if (!claimManager.isInClaim(player)) {
+                player.sendMessage("§cYou are not inside a claim.");
+                return true;
+            }
+        
+            var claim = claimManager.getClaim(player);
+        
+            player.sendMessage("§aClaim Found");
+            player.sendMessage("§7ID: §f" + claim.getUniqueId());
+            player.sendMessage("§7Type: §f" + claim.getType().name());
+            player.sendMessage("§7Owner UUID: §f" + claim.getOwnerUniqueId());
+        
+            return true;
+        }
     
         if (args.length == 0) {
     
