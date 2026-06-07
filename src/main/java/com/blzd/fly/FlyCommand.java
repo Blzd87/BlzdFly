@@ -27,40 +27,59 @@ public class FlyCommand implements CommandExecutor {
                 return true;
             }
 
+            if (player.hasPermission("blzdfly.permanent")) {
+
+                if (player.getAllowFlight()) {
+            
+                    player.setFlying(false);
+                    player.setAllowFlight(false);
+            
+                    player.sendMessage("§cFlight disabled.");
+            
+                } else {
+            
+                    player.setAllowFlight(true);
+            
+                    player.sendMessage("§aFlight enabled.");
+                }
+            
+                return true;
+            }
+            
             if (!player.hasPermission("blzdfly.timed")) {
                 player.sendMessage("§cYou do not have permission.");
                 return true;
             }
-
+            
             long remaining = plugin.getPlayerDataManager()
                     .getFlightSeconds(player.getUniqueId());
-
+            
             if (remaining <= 0) {
                 player.sendMessage("§cYou have no flight time remaining.");
                 return true;
             }
-
+            
             boolean enabled =
                     plugin.isFlightEnabled(player.getUniqueId());
-
+            
             if (enabled) {
-
+            
                 plugin.setFlightEnabled(player.getUniqueId(), false);
-
+            
                 player.setFlying(false);
                 player.setAllowFlight(false);
-
+            
                 player.sendMessage("§cFlight disabled.");
-
+            
             } else {
-
+            
                 plugin.setFlightEnabled(player.getUniqueId(), true);
-
+            
                 player.setAllowFlight(true);
-
+            
                 player.sendMessage("§aFlight enabled.");
             }
-
+            
             return true;
         }
 
