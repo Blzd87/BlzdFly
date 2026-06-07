@@ -1,6 +1,24 @@
-name: BlzdPluginTemplate
-version: 1.0
-main: com.blzd.template.BlzdPluginTemplate
+name: BlzdFly
+version: 1.0.0
+main: com.blzd.fly.BlzdFly
 api-version: '1.21'
 author: Blzd
-description: Plugin template for future custom plugins
+description: Custom flight management plugin with timed flight, permanent flight, claim flight, safe landing, and claim plugin integration.
+
+commands:
+  fly:
+    description: Manage flight
+    usage: /fly
+
+permissions:
+  blzdfly.timed:
+    default: false
+
+  blzdfly.claim:
+    default: false
+
+  blzdfly.permanent:
+    default: false
+
+  blzdfly.admin:
+    default: op
