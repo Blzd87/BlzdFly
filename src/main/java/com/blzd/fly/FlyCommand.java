@@ -57,6 +57,20 @@ public class FlyCommand implements CommandExecutor {
         }
 
         if (args.length == 1
+                && args[0].equalsIgnoreCase("ownercheck")) {
+        
+            ClaimManager claimManager = new ClaimManager();
+        
+            player.sendMessage(
+                    claimManager.isClaimOwner(player)
+                            ? "§aYou own this claim."
+                            : "§cYou do not own this claim."
+            );
+        
+            return true;
+        }
+
+        if (args.length == 1
         && args[0].equalsIgnoreCase("claiminfo")) {
 
             ClaimManager claimManager = new ClaimManager();
