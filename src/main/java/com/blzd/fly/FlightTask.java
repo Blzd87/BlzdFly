@@ -30,10 +30,6 @@ public class FlightTask extends BukkitRunnable {
             long remaining = plugin.getPlayerDataManager()
                     .getFlightSeconds(player.getUniqueId());
 
-            player.sendActionBar(
-                    Component.text("✈ Flight Time: " + TimeUtil.formatTime(remaining))
-            );
-
             if (!player.isFlying()) {
                 continue;
             }
@@ -41,6 +37,10 @@ public class FlightTask extends BukkitRunnable {
             if (player.isOnGround()) {
                 continue;
             }
+
+            player.sendActionBar(
+                    Component.text("✈ Flight Time: " + TimeUtil.formatTime(remaining))
+            );
 
             remaining--;
 
