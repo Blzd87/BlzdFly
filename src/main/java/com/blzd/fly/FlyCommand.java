@@ -27,6 +27,19 @@ public class FlyCommand implements CommandExecutor {
                 return true;
             }
 
+            if (args.length == 1 && args[0].equalsIgnoreCase("claimtest")) {
+
+                ClaimManager claimManager = new ClaimManager();
+            
+                if (claimManager.isInClaim(player)) {
+                    player.sendMessage("§aYou are inside a claim.");
+                } else {
+                    player.sendMessage("§cYou are not inside a claim.");
+                }
+            
+                return true;
+            }
+
             if (player.hasPermission("blzdfly.permanent")) {
 
                 if (player.getAllowFlight()) {
