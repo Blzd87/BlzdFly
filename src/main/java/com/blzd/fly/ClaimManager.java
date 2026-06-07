@@ -8,9 +8,14 @@ public class ClaimManager {
 
     public boolean isInClaim(Player player) {
 
-        Claim claim = GriefDefender.getCore()
-                .getClaimAt(player.getLocation());
+        Claim claim = getClaim(player);
 
         return claim != null && !claim.isWilderness();
+    }
+
+    public Claim getClaim(Player player) {
+
+        return GriefDefender.getCore()
+                .getClaimAt(player.getLocation());
     }
 }
