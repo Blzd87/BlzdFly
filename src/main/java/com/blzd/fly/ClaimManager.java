@@ -18,4 +18,15 @@ public class ClaimManager {
         return GriefDefender.getCore()
                 .getClaimAt(player.getLocation());
     }
+
+    public boolean isClaimOwner(Player player) {
+
+        Claim claim = getClaim(player);
+    
+        if (claim == null || claim.isWilderness()) {
+            return false;
+        }
+    
+        return player.getUniqueId().equals(claim.getOwnerUniqueId());
+    }
 }
