@@ -19,6 +19,10 @@ public class FlightTask extends BukkitRunnable {
 
         for (Player player : Bukkit.getOnlinePlayers()) {
 
+           if (player.hasPermission("blzdfly.permanent")) {
+                continue;
+            }
+            
             if (!player.hasPermission("blzdfly.timed")) {
                 continue;
             }
