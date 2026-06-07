@@ -51,6 +51,14 @@ public class FlightTask extends BukkitRunnable {
 
                 disableFlight(player);
 
+                player.sendTitle(
+                    "§cFlight Expired",
+                    "§7You have been safely landed.",
+                    10,
+                    40,
+                    10
+                );
+            
                 player.sendMessage("§cYour flight time has expired.");
             }
         }
