@@ -40,27 +40,32 @@ public class FlightTask extends BukkitRunnable {
 
             remaining--;
 
+            if (remaining <= 0) {
+
+                plugin.getPlayerDataManager()
+                        .setFlightSeconds(player.getUniqueId(), 0);
+            
+                disableFlight(player);
+            
+                player.sendTitle(
+                        "§cFlight Expired",
+                        "§7You have been safely landed.",
+                        10,
+                        40,
+                        10
+                );
+            
+                player.sendMessage("§cYour flight time has expired.");
+            
+                continue;
+            }
+
             plugin.getPlayerDataManager()
                     .setFlightSeconds(player.getUniqueId(), remaining);
 
             player.sendActionBar(
                     Component.text("✈ Flight Time: " + TimeUtil.formatTime(remaining))
             );
-
-            if (remaining <= 0) {
-
-                disableFlight(player);
-
-                player.sendTitle(
-                    "§cFlight Expired",
-                    "§7You have been safely landed.",
-                    10,
-                    40,
-                    10
-                );
-            
-                player.sendMessage("§cYour flight time has expired.");
-            }
         }
     }
 
