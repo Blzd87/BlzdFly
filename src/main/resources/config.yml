@@ -2,3 +2,5 @@ actionbar:
   enabled: true
 flight:
   bedrock-flight: false
+claim-flight:
+  grace-seconds: 5
