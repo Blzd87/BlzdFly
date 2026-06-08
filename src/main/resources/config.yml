@@ -1,2 +1,4 @@
 actionbar:
   enabled: true
+flight:
+  bedrock-flight: false
