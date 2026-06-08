@@ -1,31 +1,31 @@
 package com.blzd.fly;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 
-public class PlayerJoinListener implements Listener {
+public class SafeLandingUtil {
 
-private final BlzdFly plugin;
+public static void safeLand(Player player) {
 
-public PlayerJoinListener(BlzdFly plugin) {
-    this.plugin = plugin;
-}
+    player.setFlying(false);
+    player.setAllowFlight(false);
 
-@EventHandler
-public void onJoin(PlayerJoinEvent event) {
+    Location safe = player.getLocation().clone();
 
-    Player player = event.getPlayer();
+    for (int y = safe.getBlockY();
+         y > safe.getWorld().getMinHeight();
+         y--) {
 
-    if (!plugin.isFlightEnabled(player.getUniqueId())
-            && player.getAllowFlight()) {
+        safe.setY(y);
 
-        SafeLandingUtil.safeLand(player);
+        if (!safe.getBlock().isPassable()) {
 
-        player.sendMessage(
-                "§eYour previous flight session ended due to a server restart."
-        );
+            safe.setY(y + 1);
+
+            player.teleport(safe);
+
+            break;
+        }
     }
 }
 
