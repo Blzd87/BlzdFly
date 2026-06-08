@@ -10,7 +10,14 @@ softdepend:
 commands:
   fly:
     description: Manage flight
-    usage: /fly
+    usage: |
+      /fly
+      /fly info
+      /fly reload
+      /fly give <player> <time>
+      /fly remove <player> <time>
+      /fly set <player> <time>
+      /fly time <player>
 
 permissions:
   blzdfly.timed:
