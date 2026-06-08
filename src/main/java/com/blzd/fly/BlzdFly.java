@@ -25,6 +25,8 @@ public class BlzdFly extends JavaPlugin {
 
         new FlightTask(this).runTaskTimer(this, 20L, 20L);
 
+        new ClaimFlightTask(this).runTaskTimer(this, 20L, 20L);
+
         if (getServer().getPluginManager().getPlugin("GriefDefender") != null) {
             getLogger().info("GriefDefender detected.");
         } else {
