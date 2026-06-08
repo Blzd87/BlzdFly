@@ -31,7 +31,7 @@ public class BlzdFly extends JavaPlugin {
         }
 
         getServer().getPluginManager().registerEvents(
-                new PlayerJoinListener(),
+                new PlayerJoinListener(this),
                 this
         );
 
