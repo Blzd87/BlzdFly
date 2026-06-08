@@ -75,7 +75,7 @@ public class FlightTask extends BukkitRunnable {
 
     private void disableFlight(Player player) {
 
-        plugin.setFlightEnabled(player.getUniqueId(), false);
+        plugin.disableFlight(player.getUniqueId());
 
         player.setFlying(false);
         player.setAllowFlight(false);
