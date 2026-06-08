@@ -37,8 +37,8 @@ public class BedrockFlightTask extends BukkitRunnable {
                     || input.isBackward()
                     || input.isLeft()
                     || input.isRight()
-                    || input.isJump()
-                    || input.isShift();
+                    || input.isJumping()
+                    || input.isSneaking();
 
             if (!moving) {
 
