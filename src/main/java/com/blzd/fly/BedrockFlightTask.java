@@ -34,6 +34,12 @@ public class BedrockFlightTask extends BukkitRunnable {
     
             velocity.setX(velocity.getX() * 0.60);
             velocity.setZ(velocity.getZ() * 0.60);
+
+            player.sendActionBar(
+                    net.kyori.adventure.text.Component.text(
+                            "Bedrock Task Running"
+                    )
+            );
     
             player.setVelocity(velocity);
         }
