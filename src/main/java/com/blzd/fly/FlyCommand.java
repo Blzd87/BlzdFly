@@ -5,8 +5,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import com.blzd.fly.ClaimManager;
-import com.blzd.fly.FlightMode;
 
 public class FlyCommand implements CommandExecutor {
 
@@ -21,277 +19,406 @@ public class FlyCommand implements CommandExecutor {
                              Command command,
                              String label,
                              String[] args) {
-    
+
+        // /fly reload
         if (args.length == 1
                 && args[0].equalsIgnoreCase("reload")) {
-    
+
             if (!sender.hasPermission("blzdfly.admin")) {
                 sender.sendMessage("§cNo permission.");
                 return true;
             }
-    
+
             plugin.reloadConfig();
             plugin.getPlayerDataManager().reload();
-    
+
             sender.sendMessage("§aBlzdFly reloaded.");
-    
+            return true;
+        }
+
+        // Everything below requires a player
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage("Players only.");
+            return true;
+        }
+
+        // /fly info
+        if (args.length == 1
+                && args[0].equalsIgnoreCase("info")) {
+
+            if (!plugin.isFlightEnabled(player.getUniqueId())) {
+                player.sendMessage("§cFlight is currently disabled.");
+                return true;
+            }
+
+            FlightMode mode =
+                    plugin.getFlightMode(player.getUniqueId());
+
+            player.sendMessage("§6=== Flight Info ===");
+            player.sendMessage("§eMode: §f" + mode.name());
+
+            switch (mode) {
+
+                case TIMED -> {
+
+                    long remaining = plugin
+                            .getPlayerDataManager()
+                            .getFlightSeconds(
+                                    player.getUniqueId()
+                            );
+
+                    player.sendMessage(
+                            "§eRemaining: §f"
+                                    + TimeUtil.formatTime(
+                                    remaining
+                            )
+                    );
+                }
+
+                case CLAIM -> player.sendMessage(
+                        "§eClaim Flight: §aActive"
+                );
+
+                case PERMANENT -> player.sendMessage(
+                        "§ePermanent Flight: §aActive"
+                );
+            }
+
+            return true;
+        }
+
+        // Debug commands
+
+        if (args.length == 1
+                && args[0].equalsIgnoreCase("claimtest")) {
+
+            ClaimManager claimManager = new ClaimManager();
+
+            if (claimManager.isInClaim(player)) {
+                player.sendMessage("§aYou are inside a claim.");
+            } else {
+                player.sendMessage("§cYou are not inside a claim.");
+            }
+
             return true;
         }
 
         if (args.length == 1
-            && args[0].equalsIgnoreCase("info")) {
-    
-            if (!(sender instanceof Player player)) {
-                sender.sendMessage("Players only.");
+                && args[0].equalsIgnoreCase("ownercheck")) {
+
+            ClaimManager claimManager = new ClaimManager();
+
+            player.sendMessage(
+                    claimManager.isClaimOwner(player)
+                            ? "§aYou own this claim."
+                            : "§cYou do not own this claim."
+            );
+
+            return true;
+        }
+
+        if (args.length == 1
+                && args[0].equalsIgnoreCase("claiminfo")) {
+
+            ClaimManager claimManager = new ClaimManager();
+
+            if (!claimManager.isInClaim(player)) {
+                player.sendMessage("§cYou are not inside a claim.");
                 return true;
             }
-        
-            if (args.length == 1
-                    && args[0].equalsIgnoreCase("claimtest")) {
-        
-                ClaimManager claimManager = new ClaimManager();
-        
-                if (claimManager.isInClaim(player)) {
-                    player.sendMessage("§aYou are inside a claim.");
-                } else {
-                    player.sendMessage("§cYou are not inside a claim.");
-                }
-        
-                return true;
-            }
-    
-            if (args.length == 1
-                    && args[0].equalsIgnoreCase("ownercheck")) {
-            
-                ClaimManager claimManager = new ClaimManager();
-            
-                player.sendMessage(
-                        claimManager.isClaimOwner(player)
-                                ? "§aYou own this claim."
-                                : "§cYou do not own this claim."
-                );
-            
-                return true;
-            }
-    
-            if (args.length == 1
-            && args[0].equalsIgnoreCase("claiminfo")) {
-    
-                ClaimManager claimManager = new ClaimManager();
-            
-                if (!claimManager.isInClaim(player)) {
-                    player.sendMessage("§cYou are not inside a claim.");
-                    return true;
-                }
-            
-                var claim = claimManager.getClaim(player);
-            
-                player.sendMessage("§aClaim Found");
-                player.sendMessage("§7ID: §f" + claim.getUniqueId());
-                player.sendMessage("§7Owner UUID: §f" + claim.getOwnerUniqueId());
-            
-                return true;
-            }
-        
-            if (args.length == 0) {
-        
-                if (player.hasPermission("blzdfly.permanent")) {
-        
-                    if (player.getAllowFlight()) {
-        
-                        player.setFlying(false);
-                        player.setAllowFlight(false);
-                        
-                        plugin.disableFlight(player.getUniqueId());
-                        
-                        player.sendMessage("§cFlight disabled.");
-        
-                    } else {
-        
-                        player.setAllowFlight(true);
-    
-                        plugin.setFlightMode(
-                                player.getUniqueId(),
-                                FlightMode.PERMANENT
-                        );
-                        
-                        player.sendMessage("§aFlight enabled.");
-                    }
-        
-                    return true;
-                }
-    
-                ClaimManager claimManager = new ClaimManager();
-    
-                if (player.hasPermission("blzdfly.claim")
-                        && claimManager.canUseClaimFlight(player)) {
-                
-                    if (player.getAllowFlight()) {
-                
-                        player.setFlying(false);
-                        player.setAllowFlight(false);
-                        
-                        plugin.disableFlight(player.getUniqueId());
-                        
-                        player.sendMessage("§cClaim Flight disabled.");
-                
-                    } else {
-                
-                        player.setAllowFlight(true);
-    
-                        plugin.setFlightMode(
-                                player.getUniqueId(),
-                                FlightMode.CLAIM
-                        );
-                        
-                        player.sendMessage("§aClaim Flight enabled.");
-                    }
-                
-                    return true;
-                }
-        
-                if (!player.hasPermission("blzdfly.timed")) {
-                    player.sendMessage("§cYou do not have permission.");
-                    return true;
-                }
-        
-                long remaining = plugin.getPlayerDataManager()
-                        .getFlightSeconds(player.getUniqueId());
-        
-                if (remaining <= 0) {
-                    player.sendMessage("§cYou have no flight time remaining.");
-                    return true;
-                }
-        
-                boolean enabled =
-                        plugin.isFlightEnabled(player.getUniqueId());
-        
-                if (enabled) {
-        
-                    plugin.disableFlight(player.getUniqueId());
-        
+
+            var claim = claimManager.getClaim(player);
+
+            player.sendMessage("§aClaim Found");
+            player.sendMessage(
+                    "§7ID: §f" + claim.getUniqueId()
+            );
+            player.sendMessage(
+                    "§7Owner UUID: §f"
+                            + claim.getOwnerUniqueId()
+            );
+
+            return true;
+        }
+
+        // /fly
+        if (args.length == 0) {
+
+            // Permanent Flight
+
+            if (player.hasPermission("blzdfly.permanent")) {
+
+                if (plugin.isFlightEnabled(
+                        player.getUniqueId()
+                )) {
+
                     player.setFlying(false);
                     player.setAllowFlight(false);
-        
-                    player.sendMessage("§cFlight disabled.");
-        
+
+                    plugin.disableFlight(
+                            player.getUniqueId()
+                    );
+
+                    player.sendMessage(
+                            "§cFlight disabled."
+                    );
+
                 } else {
-        
+
+                    player.setAllowFlight(true);
+
                     plugin.setFlightMode(
                             player.getUniqueId(),
-                            FlightMode.TIMED
+                            FlightMode.PERMANENT
                     );
-        
+
+                    player.sendMessage(
+                            "§aFlight enabled."
+                    );
+                }
+
+                return true;
+            }
+
+            // Claim Flight
+
+            ClaimManager claimManager =
+                    new ClaimManager();
+
+            if (player.hasPermission("blzdfly.claim")
+                    && claimManager.canUseClaimFlight(
+                    player
+            )) {
+
+                if (plugin.isFlightEnabled(
+                        player.getUniqueId()
+                )) {
+
+                    player.setFlying(false);
+                    player.setAllowFlight(false);
+
+                    plugin.disableFlight(
+                            player.getUniqueId()
+                    );
+
+                    player.sendMessage(
+                            "§cClaim Flight disabled."
+                    );
+
+                } else {
+
                     player.setAllowFlight(true);
-        
-                    player.sendMessage("§aFlight enabled.");
+
+                    plugin.setFlightMode(
+                            player.getUniqueId(),
+                            FlightMode.CLAIM
+                    );
+
+                    player.sendMessage(
+                            "§aClaim Flight enabled."
+                    );
                 }
-        
+
                 return true;
             }
-        
-            if (args.length == 3
-                    && sender.hasPermission("blzdfly.admin")) {
-        
-                Player target = Bukkit.getPlayer(args[1]);
-        
-                if (target == null) {
-                    sender.sendMessage("§cPlayer not found.");
-                    return true;
-                }
-        
-                long seconds = TimeUtil.parseTime(args[2]);
-        
-                if (seconds < 0) {
-                    sender.sendMessage("§cInvalid time.");
-                    return true;
-                }
-        
-                switch (args[0].toLowerCase()) {
-        
-                    case "give" -> {
-        
-                        plugin.getPlayerDataManager()
-                                .addFlightSeconds(
-                                        target.getUniqueId(),
-                                        seconds
-                                );
-        
-                        sender.sendMessage(
-                                "§aAdded "
-                                        + TimeUtil.formatTime(seconds)
-                                        + " to "
-                                        + target.getName()
-                        );
-                    }
-        
-                    case "remove" -> {
-        
-                        plugin.getPlayerDataManager()
-                                .removeFlightSeconds(
-                                        target.getUniqueId(),
-                                        seconds
-                                );
-        
-                        sender.sendMessage(
-                                "§aRemoved "
-                                        + TimeUtil.formatTime(seconds)
-                                        + " from "
-                                        + target.getName()
-                        );
-                    }
-        
-                    case "set" -> {
-        
-                        plugin.getPlayerDataManager()
-                                .setFlightSeconds(
-                                        target.getUniqueId(),
-                                        seconds
-                                );
-        
-                        sender.sendMessage(
-                                "§aSet "
-                                        + target.getName()
-                                        + " to "
-                                        + TimeUtil.formatTime(seconds)
-                        );
-                    }
-        
-                    default -> {
-                        return false;
-                    }
-                }
-        
-                return true;
-            }
-        
-            if (args.length == 2
-                    && args[0].equalsIgnoreCase("time")
-                    && sender.hasPermission("blzdfly.admin")) {
-        
-                Player target = Bukkit.getPlayer(args[1]);
-        
-                if (target == null) {
-                    sender.sendMessage("§cPlayer not found.");
-                    return true;
-                }
-        
-                long remaining =
-                        plugin.getPlayerDataManager()
-                                .getFlightSeconds(target.getUniqueId());
-        
-                sender.sendMessage(
-                        "§a"
-                                + target.getName()
-                                + " has "
-                                + TimeUtil.formatTime(remaining)
-                                + " remaining."
+
+            // Timed Flight
+
+            if (!player.hasPermission(
+                    "blzdfly.timed"
+            )) {
+
+                player.sendMessage(
+                        "§cYou do not have permission."
                 );
-        
+
                 return true;
             }
+
+            long remaining = plugin
+                    .getPlayerDataManager()
+                    .getFlightSeconds(
+                            player.getUniqueId()
+                    );
+
+            if (remaining <= 0) {
+
+                player.sendMessage(
+                        "§cYou have no flight time remaining."
+                );
+
+                return true;
+            }
+
+            if (plugin.isFlightEnabled(
+                    player.getUniqueId()
+            )) {
+
+                plugin.disableFlight(
+                        player.getUniqueId()
+                );
+
+                player.setFlying(false);
+                player.setAllowFlight(false);
+
+                player.sendMessage(
+                        "§cFlight disabled."
+                );
+
+            } else {
+
+                plugin.setFlightMode(
+                        player.getUniqueId(),
+                        FlightMode.TIMED
+                );
+
+                player.setAllowFlight(true);
+
+                player.sendMessage(
+                        "§aFlight enabled."
+                );
+            }
+
+            return true;
         }
-    
+
+        // Admin commands
+
+        if (args.length == 3
+                && sender.hasPermission(
+                "blzdfly.admin"
+        )) {
+
+            Player target =
+                    Bukkit.getPlayer(args[1]);
+
+            if (target == null) {
+
+                sender.sendMessage(
+                        "§cPlayer not found."
+                );
+
+                return true;
+            }
+
+            long seconds =
+                    TimeUtil.parseTime(args[2]);
+
+            if (seconds < 0) {
+
+                sender.sendMessage(
+                        "§cInvalid time."
+                );
+
+                return true;
+            }
+
+            switch (args[0].toLowerCase()) {
+
+                case "give" -> {
+
+                    plugin.getPlayerDataManager()
+                            .addFlightSeconds(
+                                    target.getUniqueId(),
+                                    seconds
+                            );
+
+                    sender.sendMessage(
+                            "§aAdded "
+                                    + TimeUtil.formatTime(
+                                    seconds
+                            )
+                                    + " to "
+                                    + target.getName()
+                    );
+                }
+
+                case "remove" -> {
+
+                    plugin.getPlayerDataManager()
+                            .removeFlightSeconds(
+                                    target.getUniqueId(),
+                                    seconds
+                            );
+
+                    sender.sendMessage(
+                            "§aRemoved "
+                                    + TimeUtil.formatTime(
+                                    seconds
+                            )
+                                    + " from "
+                                    + target.getName()
+                    );
+                }
+
+                case "set" -> {
+
+                    plugin.getPlayerDataManager()
+                            .setFlightSeconds(
+                                    target.getUniqueId(),
+                                    seconds
+                            );
+
+                    sender.sendMessage(
+                            "§aSet "
+                                    + target.getName()
+                                    + " to "
+                                    + TimeUtil.formatTime(
+                                    seconds
+                            )
+                    );
+                }
+
+                default -> {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        // /fly time <player>
+
+        if (args.length == 2
+                && args[0].equalsIgnoreCase(
+                "time"
+        )
+                && sender.hasPermission(
+                "blzdfly.admin"
+        )) {
+
+            Player target =
+                    Bukkit.getPlayer(args[1]);
+
+            if (target == null) {
+
+                sender.sendMessage(
+                        "§cPlayer not found."
+                );
+
+                return true;
+            }
+
+            long remaining =
+                    plugin.getPlayerDataManager()
+                            .getFlightSeconds(
+                                    target.getUniqueId()
+                            );
+
+            sender.sendMessage(
+                    "§a"
+                            + target.getName()
+                            + " has "
+                            + TimeUtil.formatTime(
+                            remaining
+                    )
+                            + " remaining."
+            );
+
+            return true;
+        }
+
         return false;
     }
 }
+```
