@@ -5,6 +5,7 @@ import com.griefdefender.api.claim.Claim;
 import org.bukkit.entity.Player;
 import com.griefdefender.api.permission.flag.FlagPermission;
 import com.griefdefender.api.permission.TrustTypes;
+import com.griefdefender.api.permission.*;
 
 public class ClaimManager {
 
@@ -46,7 +47,7 @@ public class ClaimManager {
     
         return claim.isUserTrusted(
                 player.getUniqueId(),
-                TrustTypes.BUILDER
+                null
         );
     }
 }
