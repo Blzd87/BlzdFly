@@ -18,8 +18,10 @@ public void onJoin(PlayerJoinEvent event) {
 
     Player player = event.getPlayer();
 
-    if (!plugin.isFlightEnabled(player.getUniqueId())) {
-
+    if (!plugin.isFlightEnabled(player.getUniqueId())
+            && player.getLocation().getBlock().isPassable()
+            && !player.isOnGround()) {
+    
         SafeLandingUtil.safeLand(player);
     
         player.sendMessage(
