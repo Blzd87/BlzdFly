@@ -30,15 +30,15 @@ public class BedrockFlightTask extends BukkitRunnable {
                 continue;
             }
 
-            var input = player.getCurrentInput();
+            org.bukkit.Input input = player.getCurrentInput();
 
             boolean moving =
                     input.isForward()
                     || input.isBackward()
                     || input.isLeft()
                     || input.isRight()
-                    || input.isJumping()
-                    || input.isSneaking();
+                    || input.isJump()
+                    || input.isSneak();
 
             if (!moving) {
 
