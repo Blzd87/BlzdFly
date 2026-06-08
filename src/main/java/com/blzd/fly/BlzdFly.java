@@ -30,6 +30,11 @@ public class BlzdFly extends JavaPlugin {
             );
         }
 
+        getServer().getPluginManager().registerEvents(
+                new PlayerJoinListener(),
+                this
+        );
+
         new FlightTask(this).runTaskTimer(this, 20L, 20L);
 
         new ClaimFlightTask(this).runTaskTimer(this, 20L, 20L);
