@@ -49,7 +49,7 @@ public class ClaimFlightTask extends BukkitRunnable {
                 continue;
             }
 
-            if (plugin.getFlightMode(player.getUniqueId())
+            if (plugin.getFlightMode(uuid)
                     != FlightMode.CLAIM) {
                 continue;
             }
@@ -63,6 +63,10 @@ public class ClaimFlightTask extends BukkitRunnable {
                     player.sendMessage(
                             "§aClaim Flight restored."
                     );
+
+                    player.sendActionBar(
+                            net.kyori.adventure.text.Component.empty()
+                    );
                 }
 
                 continue;
@@ -70,20 +74,39 @@ public class ClaimFlightTask extends BukkitRunnable {
 
             if (!exitTimers.containsKey(uuid)) {
 
-                exitTimers.put(uuid, 5);
+                exitTimers.put(
+                        uuid,
+                        plugin.getConfig().getInt(
+                                "claim-flight.grace-seconds",
+                                5
+                        )
+                );
 
                 player.sendMessage(
                         "§eYou have left your claim."
                 );
 
+                int graceSeconds = plugin.getConfig().getInt(
+                        "claim-flight.grace-seconds",
+                        5
+                );
+                
                 player.sendMessage(
-                        "§eClaim Flight will end in 5 seconds."
+                        "§eClaim Flight will end in "
+                                + graceSeconds
+                                + " seconds."
                 );
 
                 continue;
             }
 
             int timeLeft = exitTimers.get(uuid) - 1;
+
+            player.sendActionBar(
+                    net.kyori.adventure.text.Component.text(
+                            "⚠ Leaving Claim: " + timeLeft + "s"
+                    )
+            );
 
             if (timeLeft <= 0) {
 
@@ -102,6 +125,10 @@ public class ClaimFlightTask extends BukkitRunnable {
             
                     player.sendMessage(
                             "§eSwitched to Timed Flight."
+                    );
+
+                    player.sendActionBar(
+                            net.kyori.adventure.text.Component.empty()
                     );
             
                     continue;
