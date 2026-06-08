@@ -22,11 +22,15 @@ public class ClaimManager {
     public boolean isClaimOwner(Player player) {
 
         Claim claim = getClaim(player);
-    
+
         if (claim == null || claim.isWilderness()) {
             return false;
         }
-    
+
         return player.getUniqueId().equals(claim.getOwnerUniqueId());
+    }
+
+    public boolean canUseClaimFlight(Player player) {
+        return isClaimOwner(player);
     }
 }
