@@ -1,7 +1,6 @@
 package com.blzd.fly;
 
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -73,24 +72,7 @@ public class FlightTask extends BukkitRunnable {
     private void disableFlight(Player player) {
 
         plugin.disableFlight(player.getUniqueId());
-
-        player.setFlying(false);
-        player.setAllowFlight(false);
-
-        Location safe = player.getLocation().clone();
-
-        for (int y = safe.getBlockY(); y > safe.getWorld().getMinHeight(); y--) {
-
-            safe.setY(y);
-
-            if (!safe.getBlock().isPassable()) {
-
-                safe.setY(y + 1);
-
-                player.teleport(safe);
-
-                break;
-            }
-        }
+    
+        SafeLandingUtil.safeLand(player);
     }
 }
