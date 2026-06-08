@@ -32,8 +32,8 @@ public class BedrockFlightTask extends BukkitRunnable {
     
             var velocity = player.getVelocity();
     
-            if (Math.abs(velocity.getX()) < 0.05
-                    && Math.abs(velocity.getZ()) < 0.05) {
+            if (Math.abs(velocity.getX()) < 0.001
+                    && Math.abs(velocity.getZ()) < 0.001) {
             
                 player.setVelocity(
                         new Vector(
