@@ -8,6 +8,7 @@ public class ClaimFlightTask extends BukkitRunnable {
 
     private final BlzdFly plugin;
     private final ClaimManager claimManager = new ClaimManager();
+    private final Map<UUID, Integer> exitTimers = new HashMap<>();
 
     public ClaimFlightTask(BlzdFly plugin) {
         this.plugin = plugin;
