@@ -109,6 +109,28 @@ public class FlyCommand implements CommandExecutor {
     
                 return true;
             }
+
+            ClaimManager claimManager = new ClaimManager();
+
+            if (player.hasPermission("blzdfly.claim")
+                    && claimManager.canUseClaimFlight(player)) {
+            
+                if (player.getAllowFlight()) {
+            
+                    player.setFlying(false);
+                    player.setAllowFlight(false);
+            
+                    player.sendMessage("§cClaim Flight disabled.");
+            
+                } else {
+            
+                    player.setAllowFlight(true);
+            
+                    player.sendMessage("§aClaim Flight enabled.");
+                }
+            
+                return true;
+            }
     
             if (!player.hasPermission("blzdfly.timed")) {
                 player.sendMessage("§cYou do not have permission.");
