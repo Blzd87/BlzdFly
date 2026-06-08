@@ -21,13 +21,17 @@ commands:
 
 permissions:
   blzdfly.timed:
+    description: Allows use of timed flight.
     default: false
 
   blzdfly.claim:
+    description: Allows use of claim flight.
     default: false
 
   blzdfly.permanent:
+    description: Allows unlimited flight.
     default: false
 
   blzdfly.admin:
+    description: Allows access to admin commands.
     default: op
