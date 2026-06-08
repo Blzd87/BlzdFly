@@ -6,6 +6,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import com.blzd.fly.ClaimManager;
+import com.blzd.fly.FlightMode;
 
 public class FlyCommand implements CommandExecutor {
 
@@ -97,13 +98,20 @@ public class FlyCommand implements CommandExecutor {
     
                     player.setFlying(false);
                     player.setAllowFlight(false);
-    
+                    
+                    plugin.disableFlight(player.getUniqueId());
+                    
                     player.sendMessage("§cFlight disabled.");
     
                 } else {
     
                     player.setAllowFlight(true);
-    
+
+                    plugin.setFlightMode(
+                            player.getUniqueId(),
+                            FlightMode.PERMANENT
+                    );
+                    
                     player.sendMessage("§aFlight enabled.");
                 }
     
@@ -119,13 +127,20 @@ public class FlyCommand implements CommandExecutor {
             
                     player.setFlying(false);
                     player.setAllowFlight(false);
-            
+                    
+                    plugin.disableFlight(player.getUniqueId());
+                    
                     player.sendMessage("§cClaim Flight disabled.");
             
                 } else {
             
                     player.setAllowFlight(true);
-            
+
+                    plugin.setFlightMode(
+                            player.getUniqueId(),
+                            FlightMode.CLAIM
+                    );
+                    
                     player.sendMessage("§aClaim Flight enabled.");
                 }
             
@@ -150,7 +165,7 @@ public class FlyCommand implements CommandExecutor {
     
             if (enabled) {
     
-                plugin.setFlightEnabled(player.getUniqueId(), false);
+                plugin.disableFlight(player.getUniqueId());
     
                 player.setFlying(false);
                 player.setAllowFlight(false);
@@ -159,7 +174,10 @@ public class FlyCommand implements CommandExecutor {
     
             } else {
     
-                plugin.setFlightEnabled(player.getUniqueId(), true);
+                plugin.setFlightMode(
+                        player.getUniqueId(),
+                        FlightMode.TIMED
+                );
     
                 player.setAllowFlight(true);
     
