@@ -30,6 +30,7 @@ public class FlyTabCompleter implements TabCompleter {
                 completions.add("reload");
             }
 
+            completions.add("info");
             completions.add("claimtest");
             completions.add("ownercheck");
             completions.add("claiminfo");
