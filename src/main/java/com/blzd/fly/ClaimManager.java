@@ -3,6 +3,8 @@ package com.blzd.fly;
 import com.griefdefender.api.GriefDefender;
 import com.griefdefender.api.claim.Claim;
 import org.bukkit.entity.Player;
+import com.griefdefender.api.permission.flag.FlagPermission;
+import com.griefdefender.api.permission.TrustTypes;
 
 public class ClaimManager {
 
@@ -42,6 +44,9 @@ public class ClaimManager {
             return true;
         }
     
-        return claim.isUserTrusted(player.getUniqueId());
+        return claim.isUserTrusted(
+                player.getUniqueId(),
+                TrustTypes.BUILDER
+        );
     }
 }
