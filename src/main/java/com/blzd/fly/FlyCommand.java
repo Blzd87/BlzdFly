@@ -92,6 +92,11 @@ public class FlyCommand implements CommandExecutor {
         if (args.length == 1
                 && args[0].equalsIgnoreCase("claimtest")) {
 
+            if (!sender.hasPermission("blzdfly.admin")) {
+                sender.sendMessage("§cNo permission.");
+                return true;
+            }
+
             ClaimManager claimManager = new ClaimManager();
 
             if (claimManager.isInClaim(player)) {
@@ -106,6 +111,11 @@ public class FlyCommand implements CommandExecutor {
         if (args.length == 1
                 && args[0].equalsIgnoreCase("ownercheck")) {
 
+            if (!sender.hasPermission("blzdfly.admin")) {
+                sender.sendMessage("§cNo permission.");
+                return true;
+            }
+
             ClaimManager claimManager = new ClaimManager();
 
             player.sendMessage(
@@ -119,6 +129,11 @@ public class FlyCommand implements CommandExecutor {
 
         if (args.length == 1
                 && args[0].equalsIgnoreCase("claiminfo")) {
+
+            if (!sender.hasPermission("blzdfly.admin")) {
+                sender.sendMessage("§cNo permission.");
+                return true;
+            }
 
             ClaimManager claimManager = new ClaimManager();
 
