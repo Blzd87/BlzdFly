@@ -2,15 +2,15 @@ package com.blzd.fly;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class BlzdFly extends JavaPlugin {
 
     private PlayerDataManager playerDataManager;
 
-    private final Set<UUID> activeFlight = new HashSet<>();
+    private final Map<UUID, FlightMode> activeFlight = new HashMap<>();
 
     @Override
     public void onEnable() {
@@ -44,15 +44,18 @@ public class BlzdFly extends JavaPlugin {
     }
 
     public boolean isFlightEnabled(UUID uuid) {
-        return activeFlight.contains(uuid);
+    return activeFlight.containsKey(uuid);
     }
-
-    public void setFlightEnabled(UUID uuid, boolean enabled) {
-
-        if (enabled) {
-            activeFlight.add(uuid);
-        } else {
-            activeFlight.remove(uuid);
-        }
+    
+    public FlightMode getFlightMode(UUID uuid) {
+        return activeFlight.get(uuid);
+    }
+    
+    public void setFlightMode(UUID uuid, FlightMode mode) {
+        activeFlight.put(uuid, mode);
+    }
+    
+    public void disableFlight(UUID uuid) {
+        activeFlight.remove(uuid);
     }
 }
