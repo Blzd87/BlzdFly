@@ -56,6 +56,26 @@ A lightweight flight management plugin for Paper and Purpur servers featuring ti
 
 ---
 
+# Screenshots
+
+## Flight Information
+
+![Flight Information](images/flight-info.png)
+
+## Timed Flight Information
+
+![Timed Flight Information](images/flight-info-timed.png)
+
+## Switching to Timed Flight
+
+![Switching to Timed Flight](images/flight-switched-timed.png)
+
+## Claim Flight Expired
+
+![Claim Flight Expired](images/claim-flight-expired.png)
+
+---
+
 ## Commands
 
 ### Player Commands
