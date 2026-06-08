@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import com.blzd.fly.FlightMode;
 
 public class FlightTask extends BukkitRunnable {
 
@@ -19,15 +20,11 @@ public class FlightTask extends BukkitRunnable {
 
         for (Player player : Bukkit.getOnlinePlayers()) {
 
-           if (player.hasPermission("blzdfly.permanent")) {
-                continue;
-            }
-            
-            if (!player.hasPermission("blzdfly.timed")) {
+            if (!plugin.isFlightEnabled(player.getUniqueId())) {
                 continue;
             }
 
-            if (!plugin.isFlightEnabled(player.getUniqueId())) {
+            if (plugin.getFlightMode(player.getUniqueId()) != FlightMode.TIMED) {
                 continue;
             }
 
