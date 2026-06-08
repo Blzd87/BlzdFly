@@ -18,11 +18,10 @@ public void onJoin(PlayerJoinEvent event) {
 
     Player player = event.getPlayer();
 
-    if (!plugin.isFlightEnabled(player.getUniqueId())
-            && player.getAllowFlight()) {
+    if (!plugin.isFlightEnabled(player.getUniqueId())) {
 
         SafeLandingUtil.safeLand(player);
-
+    
         player.sendMessage(
                 "§eYour previous flight session ended due to a server restart."
         );
