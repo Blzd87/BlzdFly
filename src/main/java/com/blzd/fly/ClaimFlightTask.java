@@ -70,9 +70,27 @@ public class ClaimFlightTask extends BukkitRunnable {
             if (timeLeft <= 0) {
 
                 exitTimers.remove(uuid);
-
+            
+                long remaining = plugin.getPlayerDataManager()
+                        .getFlightSeconds(uuid);
+            
+                if (player.hasPermission("blzdfly.timed")
+                        && remaining > 0) {
+            
+                    plugin.setFlightMode(
+                            uuid,
+                            FlightMode.TIMED
+                    );
+            
+                    player.sendMessage(
+                            "§eSwitched to Timed Flight."
+                    );
+            
+                    continue;
+                }
+            
                 disableClaimFlight(player);
-
+            
                 player.sendTitle(
                         "§cClaim Flight Expired",
                         "§7You have been safely landed.",
@@ -80,11 +98,11 @@ public class ClaimFlightTask extends BukkitRunnable {
                         40,
                         10
                 );
-
+            
                 player.sendMessage(
                         "§cClaim Flight expired."
                 );
-
+            
                 continue;
             }
 
