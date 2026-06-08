@@ -1,6 +1,13 @@
+# Show action bars for timed and claim flight.
 actionbar:
   enabled: true
+
 flight:
+  # Bedrock-style flight.
+  # Players stop instantly when movement keys are released.
   bedrock-flight: false
+
 claim-flight:
+  # Seconds a player can remain outside their claim
+  # before Claim Flight expires.
   grace-seconds: 5
