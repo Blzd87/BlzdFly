@@ -15,35 +15,27 @@ public class BedrockFlightTask extends BukkitRunnable {
 
     @Override
     public void run() {
-
+    
         if (!plugin.getConfig().getBoolean("flight.bedrock-flight")) {
             return;
         }
-
+    
         for (Player player : Bukkit.getOnlinePlayers()) {
-
+    
             if (!player.isFlying()) {
                 continue;
             }
-
+    
             if (!plugin.isFlightEnabled(player.getUniqueId())) {
                 continue;
             }
-
-            Vector velocity = player.getVelocity();
-
-            // Only stop very small drift
-            if (Math.abs(velocity.getX()) < 0.05
-                    && Math.abs(velocity.getZ()) < 0.05) {
-
-                player.setVelocity(
-                        new Vector(
-                                0,
-                                velocity.getY(),
-                                0
-                        )
-                );
-            }
+    
+            var velocity = player.getVelocity();
+    
+            velocity.setX(velocity.getX() * 0.60);
+            velocity.setZ(velocity.getZ() * 0.60);
+    
+            player.setVelocity(velocity);
         }
     }
 }
