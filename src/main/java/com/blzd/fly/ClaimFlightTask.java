@@ -29,12 +29,30 @@ public class ClaimFlightTask extends BukkitRunnable {
                 continue;
             }
 
+            UUID uuid = player.getUniqueId();
+
+            if (plugin.getFlightMode(uuid) == FlightMode.TIMED) {
+            
+                if (player.hasPermission("blzdfly.claim")
+                        && claimManager.canUseClaimFlight(player)) {
+            
+                    plugin.setFlightMode(
+                            uuid,
+                            FlightMode.CLAIM
+                    );
+            
+                    player.sendMessage(
+                            "§aSwitched to Claim Flight."
+                    );
+                }
+            
+                continue;
+            }
+
             if (plugin.getFlightMode(player.getUniqueId())
                     != FlightMode.CLAIM) {
                 continue;
             }
-
-            UUID uuid = player.getUniqueId();
 
             if (claimManager.canUseClaimFlight(player)) {
 
