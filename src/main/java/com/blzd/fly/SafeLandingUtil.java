@@ -28,3 +28,5 @@ public void onJoin(PlayerJoinEvent event) {
         );
     }
 }
+
+}
