@@ -7,12 +7,26 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 public class PlayerJoinListener implements Listener {
 
-    @EventHandler
-    public void onJoin(PlayerJoinEvent event) {
+private final BlzdFly plugin;
 
-        Player player = event.getPlayer();
+public PlayerJoinListener(BlzdFly plugin) {
+    this.plugin = plugin;
+}
 
-        player.setFlying(false);
-        player.setAllowFlight(false);
+@EventHandler
+public void onJoin(PlayerJoinEvent event) {
+
+    Player player = event.getPlayer();
+
+    if (!plugin.isFlightEnabled(player.getUniqueId())
+            && player.getAllowFlight()) {
+
+        SafeLandingUtil.safeLand(player);
+
+        player.sendMessage(
+                "§eYour previous flight session ended due to a server restart."
+        );
     }
+}
+
 }
