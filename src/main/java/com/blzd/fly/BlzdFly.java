@@ -20,7 +20,14 @@ public class BlzdFly extends JavaPlugin {
         playerDataManager = new PlayerDataManager(this);
 
         if (getCommand("fly") != null) {
-            getCommand("fly").setExecutor(new FlyCommand(this));
+
+            getCommand("fly").setExecutor(
+                    new FlyCommand(this)
+            );
+        
+            getCommand("fly").setTabCompleter(
+                    new FlyTabCompleter()
+            );
         }
 
         new FlightTask(this).runTaskTimer(this, 20L, 20L);
