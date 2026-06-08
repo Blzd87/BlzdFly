@@ -31,6 +31,17 @@ public class ClaimManager {
     }
 
     public boolean canUseClaimFlight(Player player) {
-        return isClaimOwner(player);
+
+        Claim claim = getClaim(player);
+    
+        if (claim == null || claim.isWilderness()) {
+            return false;
+        }
+    
+        if (player.getUniqueId().equals(claim.getOwnerUniqueId())) {
+            return true;
+        }
+    
+        return claim.isUserTrusted(player.getUniqueId());
     }
 }
