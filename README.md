@@ -188,7 +188,7 @@ Players with `blzdfly.permanent` have unlimited flight access.
 
 ## Version
 
-Current Release: **v1.0.0**
+Current Release: **v1.0.1**
 
 ---
 
