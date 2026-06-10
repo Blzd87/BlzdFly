@@ -13,6 +13,7 @@ public class ClaimFlightTask extends BukkitRunnable {
     private final BlzdFly plugin;
     private final ClaimManager claimManager = new ClaimManager();
 
+    private final Map<UUID, Boolean> wasInClaim = new HashMap<>();
     private final Map<UUID, Integer> exitTimers = new HashMap<>();
 
     public ClaimFlightTask(BlzdFly plugin) {
@@ -29,6 +30,11 @@ public class ClaimFlightTask extends BukkitRunnable {
             }
 
             UUID uuid = player.getUniqueId();
+
+            boolean inClaim = claimManager.canUseClaimFlight(player);
+            boolean previouslyInClaim = wasInClaim.getOrDefault(uuid, inClaim);
+            
+            wasInClaim.put(uuid, inClaim);
 
             if (plugin.getFlightMode(uuid) == FlightMode.TIMED) {
             
@@ -53,7 +59,7 @@ public class ClaimFlightTask extends BukkitRunnable {
                 continue;
             }
 
-            if (claimManager.canUseClaimFlight(player)) {
+            if (inClaim) {
 
                 if (exitTimers.containsKey(uuid)) {
 
@@ -73,10 +79,42 @@ public class ClaimFlightTask extends BukkitRunnable {
 
             if (!exitTimers.containsKey(uuid)) {
 
-                if (!player.isFlying()) {
+                // Player didn't just leave a claim
+                if (!previouslyInClaim) {
                     continue;
                 }
-
+            
+                // Walking on the ground?
+                if (player.isOnGround()) {
+            
+                    long remaining = plugin.getPlayerDataManager()
+                            .getFlightSeconds(uuid);
+            
+                    if (player.hasPermission("blzdfly.timed")
+                            && remaining > 0) {
+            
+                        plugin.setFlightMode(
+                                uuid,
+                                FlightMode.TIMED
+                        );
+            
+                        player.sendMessage(
+                                "§eSwitched to Timed Flight."
+                        );
+            
+                    } else {
+            
+                        disableClaimFlight(player);
+            
+                        player.sendMessage(
+                                "§cClaim Flight disabled."
+                        );
+                    }
+            
+                    continue;
+                }
+            
+                // Flying -> start grace period
                 exitTimers.put(
                         uuid,
                         plugin.getConfig().getInt(
@@ -160,7 +198,12 @@ public class ClaimFlightTask extends BukkitRunnable {
 
     private void disableClaimFlight(Player player) {
 
-        plugin.disableFlight(player.getUniqueId());
+        UUID uuid = player.getUniqueId();
+    
+        exitTimers.remove(uuid);
+        wasInClaim.remove(uuid);
+    
+        plugin.disableFlight(uuid);
     
         SafeLandingUtil.safeLand(player);
     }
