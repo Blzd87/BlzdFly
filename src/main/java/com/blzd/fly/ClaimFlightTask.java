@@ -73,7 +73,7 @@ public class ClaimFlightTask extends BukkitRunnable {
 
             if (!exitTimers.containsKey(uuid)) {
 
-                if (player.isOnGround()) {
+                if (!player.isFlying()) {
                     continue;
                 }
 
