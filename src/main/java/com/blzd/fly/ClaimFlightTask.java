@@ -73,6 +73,10 @@ public class ClaimFlightTask extends BukkitRunnable {
 
             if (!exitTimers.containsKey(uuid)) {
 
+                if (player.isOnGround()) {
+                    continue;
+                }
+
                 exitTimers.put(
                         uuid,
                         plugin.getConfig().getInt(
