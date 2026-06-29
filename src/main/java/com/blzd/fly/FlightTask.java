@@ -23,7 +23,11 @@ public class FlightTask extends BukkitRunnable {
                 continue;
             }
 
-            if (plugin.getFlightMode(player.getUniqueId()) != FlightMode.TIMED) {
+            FlightMode mode = plugin.getFlightMode(player.getUniqueId());
+
+            restoreFlight(player);
+            
+            if (mode != FlightMode.TIMED) {
                 continue;
             }
 
@@ -66,6 +70,17 @@ public class FlightTask extends BukkitRunnable {
             player.sendActionBar(
                     Component.text("✈ Flight Time: " + TimeUtil.formatTime(remaining))
             );
+        }
+    }
+
+    private void restoreFlight(Player player) {
+
+        if (player.getGameMode().name().equals("SPECTATOR")) {
+            return;
+        }
+    
+        if (!player.getAllowFlight()) {
+            player.setAllowFlight(true);
         }
     }
 
