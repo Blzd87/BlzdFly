@@ -29,6 +29,10 @@ public class ClaimFlightTask extends BukkitRunnable {
                 continue;
             }
 
+            if (!player.getAllowFlight()) {
+                player.setAllowFlight(true);
+            }
+
             UUID uuid = player.getUniqueId();
 
             boolean inClaim = claimManager.canUseClaimFlight(player);
