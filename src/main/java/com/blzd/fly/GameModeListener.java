@@ -16,17 +16,22 @@ public class GameModeListener implements Listener {
 
     @EventHandler
     public void onGameModeChange(PlayerGameModeChangeEvent event) {
-
+    
+        if (!event.getNewGameMode().name().equals("SURVIVAL")
+                && !event.getNewGameMode().name().equals("ADVENTURE")) {
+            return;
+        }
+    
         Player player = event.getPlayer();
-
+    
         Bukkit.getScheduler().runTask(plugin, () -> {
-
+    
             if (!plugin.isFlightEnabled(player.getUniqueId())) {
                 return;
             }
-
+    
             player.setAllowFlight(true);
-
+    
             if (!player.isOnGround()) {
                 player.setFlying(true);
             }
