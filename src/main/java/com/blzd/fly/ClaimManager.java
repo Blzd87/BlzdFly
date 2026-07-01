@@ -32,9 +32,9 @@ public class ClaimManager {
             return true;
         }
     
-        // Trusted with build permission
-        return claim.canBuild(player);
-    }                                                                                                                                                                                        
+        // Trusted player
+        return claim.isUserTrusted(player.getUniqueId());
+    }                                                                                                                                                                                       
 
     public boolean canUseClaimFlight(Player player) {
         return isClaimOwner(player);
