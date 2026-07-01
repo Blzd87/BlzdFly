@@ -2,7 +2,7 @@ package com.blzd.fly;
 
 import com.griefdefender.api.GriefDefender;
 import com.griefdefender.api.claim.Claim;
-import com.griefdefender.api.claim.TrustType;
+import com.griefdefender.api.claim.TrustTypes;
 import org.bukkit.entity.Player;
 
 public class ClaimManager {
@@ -33,9 +33,13 @@ public class ClaimManager {
             return true;
         }
     
-        // Trusted player
-        return claim.isUserTrusted(player.getUniqueId(), TrustType.BUILDER);
-    }                                                                                                                                                                                       
+        // Builder trust
+        if (claim.isUserTrusted(player.getUniqueId(), TrustTypes.MANAGER)) {
+            return true;
+        }
+        
+        return claim.isUserTrusted(player.getUniqueId(), TrustTypes.BUILDER);
+    }                                                                                                                                                                                      
 
     public boolean canUseClaimFlight(Player player) {
         return isClaimOwner(player);
